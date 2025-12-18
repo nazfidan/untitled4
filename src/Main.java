@@ -111,6 +111,21 @@ public class Main {
                 total += profitData[m][d][ci];
         return total;
     }
+    public static int bestDayOfMonth(int month) {
+        if (month < 0 || month >= MONTHS) return -1;
+        int bestDay = 1;
+        int bestProfit = -999999;
+        for (int d = 0; d < DAYS; d++) {
+            int sum = 0;
+            for (int c = 0; c < COMMS; c++)
+                sum += profitData[month][d][c];
+            if (sum > bestProfit) {
+                bestProfit = sum;
+                bestDay = d + 1;
+            }
+        }
+        return bestDay;
+    }
 
 
 
