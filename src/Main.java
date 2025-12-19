@@ -97,7 +97,8 @@ public class Main {
         if (month < 0 || month >= MONTHS || day < 1 || day > 28) return -99999;
         int sum = 0;
         for (int c = 0; c < COMMS; c++) {
-            sum += profitData[month][day - 1][c];
+            int profit=profitData[month][day-1][c];
+            sum+=profit;
         }
         return sum;
     }
@@ -126,6 +127,25 @@ public class Main {
         }
         return bestDay;
     }
+    public static String bestMonthForCommodity(String comm) {
+        int ci = getCommIndex(comm);
+        if (ci == -1) return "INVALID_COMMODITY";
+        int [] monthTotals=new int[MONTHS];
+        for(int m=0;m<MONTHS;m++){
+            for(int d=0;d<DAYS;d++){
+                monthTotals[m]+=profitData[m][d][ci];
+            }
+        }
+        int highest=0;
+        for(int m=1;m<MONTHS;m++){
+            if(monthTotals[m]>monthTotals[highest]){
+                highest=m;
+
+            }
+        }
+        return months[highest];
+    }
+
 
 
 
