@@ -145,6 +145,24 @@ public class Main {
         }
         return months[highest];
     }
+    public static int consecutiveLossDays(String comm) {
+        int ci = getCommIndex(comm);
+        if (ci == -1) return -1;
+        int longest = 0;
+        int current = 0;
+        for (int m = 0; m < MONTHS; m++) {
+            for (int d = 0; d < DAYS; d++) {
+                if (profitData[m][d][ci] < 0) {
+                    current++;
+                    if (current > longest){
+                        longest = current;
+                    }
+                } else current = 0;
+            }
+        }
+        return longest;
+
+    }
 
 
 
