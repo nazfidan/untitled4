@@ -70,27 +70,23 @@ public class Main {
     }
 
 
-
-
-
-
-
-
     // ======== 10 REQUIRED METHODS (Students fill these) ========
 
     public static String mostProfitableCommodityInMonth(int month) {
         if(month<0 || month>=MONTHS) return "INVALID_MONTH";
-        int[] list = new int[COMMS];
-        for (int d = 0; d < DAYS; d++)
-            for (int c = 0; c < COMMS; c++)
-                list[c] += profitData[month][d][c];
-        int most=0;
-        for(int c=1;c<COMMS;c++){
-            if(list[c]>list[most]){
-                most=c;
+        int bestProfit=-99999;
+        int bestCommodity=0;
+        for(int c=0;c<COMMS;c++){
+            int sum=0;
+            for(int d=0;d<DAYS;d++){
+                sum+=profitData[month][d][c];
+            }
+            if(sum>bestProfit){
+                bestProfit=sum;
+                bestCommodity=c;
             }
         }
-        return commodities[most] + " " + list[most];
+        return commodities[bestCommodity] +" " +bestProfit;
     }
 
     public static int totalProfitOnDay(int month, int day) {
@@ -103,12 +99,20 @@ public class Main {
         return sum;
     }
 
-    public static int commodityProfitInRange(String commodity, int from, int to) {
+    public static int commodityProfitInRange(String commodity, int fromDay, int toDay) {
         int ci = getCommIndex(commodity);
-        if (ci == -1 || from < 1 || to > 28 || from > to) return -99999;
+        if (ci ==-1){
+            return -99999;
+        }
+        if(fromDay<1 || toDay>DAYS){
+            return -99999;
+        }
+        if(fromDay>toDay){
+            return -99999;
+        }
         int total = 0;
         for (int m = 0; m < MONTHS; m++)
-            for (int d = from-1; d <= to-1; d++)
+            for (int d = fromDay-1; d <= toDay-1; d++)
                 total += profitData[m][d][ci];
         return total;
     }
@@ -127,8 +131,8 @@ public class Main {
         }
         return bestDay;
     }
-    public static String bestMonthForCommodity(String comm) {
-        int ci = getCommIndex(comm);
+    public static String bestMonthForCommodity(String commodity) {
+        int ci = getCommIndex(commodity);
         if (ci == -1) return "INVALID_COMMODITY";
         int [] monthTotals=new int[MONTHS];
         for(int m=0;m<MONTHS;m++){
@@ -145,8 +149,8 @@ public class Main {
         }
         return months[highest];
     }
-    public static int consecutiveLossDays(String comm) {
-        int ci = getCommIndex(comm);
+    public static int consecutiveLossDays(String commodity) {
+        int ci = getCommIndex(commodity);
         if (ci == -1) return -1;
         int longest = 0;
         int current = 0;
@@ -163,8 +167,8 @@ public class Main {
         return longest;
 
     }
-    public static int daysAboveThreshold(String comm, int threshold) {
-        int ci = getCommIndex(comm);
+    public static int daysAboveThreshold(String commodity, int threshold) {
+        int ci = getCommIndex(commodity);
         if (ci == -1) return -1;
         int count = 0;
         for (int m = 0; m < MONTHS; m++) {
@@ -177,6 +181,46 @@ public class Main {
         }
         return count;
     }
+    public static int biggestDailySwing(int month) {
+        if (month < 0 || month >= MONTHS) return -99999;
+        int max = 0;
+        for (int d = 0; d < DAYS-1; d++) {
+            int sum1 = 0;
+            int sum2=0;
+            for (int c = 0; c < COMMS; c++) {
+                sum1 += profitData[month][d][c];
+                sum2 += profitData[month][d+1][c];
+            }
+            int different = sum1 - sum2;
+            if (different < 0) {
+                different = -different;
+            }
+            if (different > max) {
+                max = different;
+            }
+        }
+        return max;
+    }
+
+    public static String compareTwoCommodities(String c1, String c2) {
+        int comm1=getCommIndex(c1);
+        int comm2=getCommIndex(c2);
+        if(comm1==-1 || comm2==-1) return "INVALID_COMMODITY";
+        int total1=0;
+        int total2=0;
+        for(int m=0;m<MONTHS;m++){
+            for(int d=0;d<DAYS;d++){
+                total1+=profitData[m][d][comm1];
+                total2+=profitData[m][d][comm2];
+            }
+        }
+        if(total1==total2)return "Equal";
+        if(total1>total2)return c1 +"is better by"+(total1-total2);
+        return c2 + "is better by" +(total2-total1);
+
+    }
+
+
 
 
 
