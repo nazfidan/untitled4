@@ -163,6 +163,20 @@ public class Main {
         return longest;
 
     }
+    public static int daysAboveThreshold(String comm, int threshold) {
+        int ci = getCommIndex(comm);
+        if (ci == -1) return -1;
+        int count = 0;
+        for (int m = 0; m < MONTHS; m++) {
+            for (int d = 0; d < DAYS; d++) {
+                int profit=profitData[m][d][ci];
+                if(profit>threshold){
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
 
 
 
