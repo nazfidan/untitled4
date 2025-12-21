@@ -134,20 +134,20 @@ public class Main {
     public static String bestMonthForCommodity(String commodity) {
         int ci = getCommIndex(commodity);
         if (ci == -1) return "INVALID_COMMODITY";
-        int [] monthTotals=new int[MONTHS];
+        int bestMonth=0;
+        int bestProfit=-99999;
         for(int m=0;m<MONTHS;m++){
+            int monthTotal=0;
             for(int d=0;d<DAYS;d++){
-                monthTotals[m]+=profitData[m][d][ci];
+                int value=profitData[m][d][ci];
+                monthTotal+=value;
+            }
+            if(monthTotal>bestProfit){
+                bestProfit=monthTotal;
+                bestMonth=m;
             }
         }
-        int highest=0;
-        for(int m=1;m<MONTHS;m++){
-            if(monthTotals[m]>monthTotals[highest]){
-                highest=m;
-
-            }
-        }
-        return months[highest];
+        return months[bestMonth];
     }
     public static int consecutiveLossDays(String commodity) {
         int ci = getCommIndex(commodity);
@@ -215,12 +215,29 @@ public class Main {
             }
         }
         if(total1==total2)return "Equal";
-        if(total1>total2)return c1 +"is better by"+(total1-total2);
-        return c2 + "is better by" +(total2-total1);
+        if(total1>total2)return c1 +"is better by" + (total1-total2);
+        return c2 + "is better by" + (total2-total1);
 
     }
+    public static String bestWeekOfMonth(int month) {
+        if(month<0 || month>=MONTHS) return "INVALID_MONTH";
+        int bestWeek=1;
+        int bestProfit=-99999;
+        for(int w=0;w<4;w++){
+            int sum=0;
+            for(int d=w*7;d<w*7+7;d++){
+                for(int c=0;c<COMMS;c++){
+                    sum+=profitData[month][d][c];
+                }
+            }
+            if(sum>bestProfit){
+                bestProfit=sum;
+                bestWeek=w+1;
+            }
+        }
+        return"Week" +bestWeek;
 
-
+    }
 
 
 
