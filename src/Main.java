@@ -35,9 +35,13 @@ public class Main {
             Scanner sc=null;
             try {
                 sc = new Scanner(new File("src/Data_Files/" + months[m] + ".txt"));
-            } catch (Exception e) {
-                continue;
 
+            } catch (Exception e1) {
+                try{
+                    sc=new Scanner(new File("Data_Files/" + months[m] + ".txt"));
+                }catch(Exception e2) {
+                    continue;
+                }
             }
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
@@ -76,11 +80,13 @@ public class Main {
         if(month<0 || month>=MONTHS) return "INVALID_MONTH";
         int bestProfit=-99999;
         int bestCommodity=0;
+
         for(int c=0;c<COMMS;c++){
             int sum=0;
             for(int d=0;d<DAYS;d++){
                 sum+=profitData[month][d][c];
             }
+
             if(sum>bestProfit){
                 bestProfit=sum;
                 bestCommodity=c;
@@ -215,8 +221,8 @@ public class Main {
             }
         }
         if(total1==total2)return "Equal";
-        if(total1>total2)return c1 +"is better by" + (total1-total2);
-        return c2 + "is better by" + (total2-total1);
+        if(total1>total2)return c1 +" is better by " + (total1-total2);
+        return c2 + " is better by " + (total2-total1);
 
     }
     public static String bestWeekOfMonth(int month) {
@@ -235,13 +241,9 @@ public class Main {
                 bestWeek=w+1;
             }
         }
-        return"Week" +bestWeek;
+        return"Week " +bestWeek;
 
     }
-
-
-
-
 
 
 
